@@ -1,0 +1,76 @@
+vim-set
+=======
+修改自别人的设置
+我的vim配置和bashrc配置（这个是只是为了备份自己的设置）
+
+vim配置安装方法：
+
+1. 备份自己家目录下原有的 .vimrc 文件和 .vim目录 （按下Ctrl+h显示隐藏文件，原先没有这两个文件的话无视这一步）
+
+2. 将目录里的 vimrc 复制到家目录下改名为 .vimrc （前面加一个小数点，这个表示隐藏文件，下同）
+
+3. 将目录里的 vim 文件夹 复制到家目录下，改名为 .vim
+
+ How To Install：
+ 
+      1. 将压缩包所有文件放到家目录下即可（注意.vim目录和.vimrc是隐藏文件） 关于vimrc的配置问题，我写了比较详细的注释，大家可以参考着看看，配色文件是我比较喜欢的，这个不喜欢的话请自行更换。
+ 
+      2. 配置补全 能由我配置的我都配置好了，此外宏跳转还需要tags文件（就是一个补全索引文件）的支持，在vimrc里可以看到如下几行：
+
+            set tags+=./tags
+            set tags+=/usr/include/tags
+            set tags+=/usr/include/c++/tags
+            set tags+=/usr/include/Qt/tags
+            set tags+=/usr/include/gtk-2.0/tags
+            set tags+=/usr/include/gtk-3.0/tags
+
+ 
+        换句话说需要以上tags文件支持，每个人都要自己生成。步骤如下：
+ 
+      1） 确保安装了 ctags ，没有的话 sudo yum install ctags（gun版的ctags有的不行，那么请到http://ctags.sourceforge.net/下载编译安装）
+ 
+      2） 终端切换到/usr/include/目录执行 ctags * 生成tags文件。[C++头文件使用 ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .]
+ 
+      3） 其余目录随意，注意小目录要加 -R参数（递归搜索），即 ctags -R 
+             但是在include目录别这么搞。因为头文件太多，搞出一个几个G的tags就不好了。
+ 
+      4） 其他目录添加按照格式来就好，确保tags文件存在就可以，当前工程可以在vim里按下F5键生成当前目录tags。
+ 
+      3. 修改 .vim/c-support/templates 目录下 Templates Templates-c Templates-cpp 三个文件的如下内容：
+ 
+
+                    |AUTHOR| = Hurley
+                    |AUTHORREF| = 
+                    |EMAIL| = xxxx@gmail.com
+                    |COMPANY| = Class 1107 of Computer Science and Technology
+                    |COPYRIGHT| = None
+
+ 
+        这样每次打开vim test.c之类的新文件会自动添加相关注释和模板。
+ 
+      4. 介绍下这个配置常用的功能：
+ 
+        其实vimrc里能看到的，我简要罗列下：
+ 
+        1）按下wm键（非编辑模式），启动WMToggle，像不像一个IDE？
+              标签的切换鼠标双击或者键盘都行。
+              按下Ctrl+h/j/k/l，可以切换到当前窗口的上下左右窗口，详见vimrc。
+ 
+        2）tab键是自动补全，很帅吧；结构体按下 . 也有补全哦。
+ 
+        3）按下F6，执行make编译程序，并打开quickfix窗口，显示编译信息
+              按下F7，光标移到上一个错误所在的行
+              按下F8，光标移到下一个错误所在的行 按下F9，执行make clean
+ 
+              这个适应需要时间的，觉得不爽的的话请自行修改vimrc。
+ 
+       4）对于( , { , [  括号都有自动补全另一半并且切换光标到中间，不喜欢请注释掉vimrc相关条目 另外关于()的补全因为用到一个显示函数原型的插件echofunc，简单的键映射不行，所以我修改了echofunc的相关代码实现了补全，想去掉的话请自行修改echofunc插件的相关函数，就在.vim的插件目录下。
+ 
+       5 ）自动补全插件clang_complete需要clang编译器支持，请先安装clang，各大发行版安装源应该都有。安装好后启动vim依旧报错的话请注释掉（引号起始是注释）.vimrc 文件里以下行：
+ 
+             let g:clang_use_library=1
+ 
+       6）其实还有很多功能就不一一说了，请参考.vim/doc目录下的各种帮助文件吧，都很详细的。
+ 
+
+p.s. 还有C.sh 和 CPP.sh这两个shell用于切换当前vim采用的模板格式，写C代码前请执行C.sh，C++代码执行CPP.sh(执行完后切换语言的时候才需要再次执行，这个只是为了模板加载时候的选择而已) 
